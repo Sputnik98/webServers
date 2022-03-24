@@ -1,4 +1,3 @@
-from distutils.log import debug
 from flask import Flask
 from flask import Flask, jsonify
 import math
@@ -20,8 +19,8 @@ def get_datosD(inicial,final,tolerancia,dato):
     fb = float(0)
     fc = float(0)
     xold = float(0)
-    fa = funcion(inicial,dato)
-    fb = funcion(final,dato)
+    fa = funcionN(inicial,dato)
+    fb = funcionN(final,dato)
 
     iterador = int(0)
     
@@ -31,7 +30,7 @@ def get_datosD(inicial,final,tolerancia,dato):
         
     while(error>tol):
         r = (inicial+final)/2
-        fc=funcion(r,dato)
+        fc=funcionN(r,dato)
         if(fa*fc>0):
                 inicial = r
                 fa = fc
@@ -44,11 +43,10 @@ def get_datosD(inicial,final,tolerancia,dato):
         xold = r
         biseccion = r
     return jsonify({ "biseccion" : biseccion})
-    
 #funciones
-def funcion(a,exp):
+def funcionN(a,exp):
     x = sympy.symbols('x')
     return sympy.sympify(exp).subs(x,a)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4000)
+    app.run(debug=True, port=5000)
