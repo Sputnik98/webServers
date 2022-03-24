@@ -86,14 +86,14 @@ def newthon(dato1,dato2):
     error= bool(True)
     x1 = float(0.0)
     while(error and iteraciones<1000):
-        x1 = dato1 - (funcion(dato1)/derivada(dato1))
+        x1 = dato1 - (funcion1(dato1)/derivada(dato1))
         iteraciones+=iteraciones
-        if(funcion(x1)<=dato2):
+        if(funcion1(x1)<=dato2):
             error = False
-            raphson = funcion(x1)
+            raphson = funcion1(x1)
             return jsonify({ "raphson" : raphson})
 
-def funcion(x):
+def funcion1(x):
     return math.atan(math.cos(x))
 
 def derivada(x):
@@ -102,5 +102,3 @@ def derivada(x):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-
-
