@@ -58,11 +58,10 @@ def reglaFalse(dato1,dato2,dato3,dato4):
     tol = float(dato3)
     dato4 = dato4
     c = float(0)
-    
-    if(funciones(inicial,dato4)*funciones(final,dato4)>0):
-        reglaFalsa = print('No se cumple la condición')
+    if(funciones(inicial,dato4)*funcion(final,dato4)>0):
+        reglaFalsa = print("No se cumple la regla")
         return jsonify({"reglaFalsa" : reglaFalsa})
-    else:
+    else:    
         while(1>0):
             c = ((funciones(final,dato4)*inicial) - (funciones(inicial,dato4)*final)) / (funciones(final,dato4)-funciones(inicial,dato4))
             if(funciones(c,dato4)<=tol):
@@ -72,7 +71,6 @@ def reglaFalse(dato1,dato2,dato3,dato4):
                 final = c
             else:
                 inicial = c
-
     return jsonify({"reglaFalsa":str(reglaFalsa)})
 
 def funciones(a,datos):
@@ -80,8 +78,29 @@ def funciones(a,datos):
     return sympy.sympify(datos).subs(x,a)
 
 
+@app.route('/raphson/<string:dato1>/<string:dato2>')
+def newthon(dato1,dato2):
+    dato1 = float(dato1)
+    dato2 = float(dato2)
+    iteraciones = int(0)
+    error= bool(True)
+    x1 = float(0.0)
+    while(error and iteraciones<1000):
+        x1 = dato1 - (funcion(dato1)/derivada(dato1))
+        iteraciones+=iteraciones
+        if(funcion(x1)<=dato2):
+            error = False
+            raphson = funcion(x1)
+            return jsonify({ "raphson" : raphson})
+
+def funcion(x):
+    return math.atan(math.cos(x))
+
+def derivada(x):
+    return -(math.sin(x)/1+x**2)
 
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
 
