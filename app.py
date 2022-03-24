@@ -1,7 +1,5 @@
 #Librerias a usar
-from ast import expr
 from distutils.log import debug
-import string
 from flask import Flask
 from flask import Flask, jsonify
 import math
