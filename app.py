@@ -1,103 +1,57 @@
-from distutils.log import debug
 from flask import Flask
 from flask import Flask, jsonify
-import math
-import sympy
+from random import * 
+
 
 app = Flask(__name__)
 
-@app.route('/biseccion/<string:inicial>/<string:final>/<string:tolerancia>/<string:dato>')
-def metodo(inicial, final, tolerancia,dato):
-    inicial = float(inicial)
-    final = float(final)
-    tol = float(tolerancia)
-    dato = dato.replace('%','/')
-    r = float(0)
+@app.route('/costoEnvio/<string:peso>/<string:alto>/<string:largo>/<string:ancho>')
+def calcularEnvio(peso,alto,largo,ancho):
+    peso = float(peso)
+    alto = float(alto)
+    largo = float(largo)
+    ancho = float(ancho)
+    costo = float(0)
     
-    error = float(100)
+    costo = (largo*ancho*alto/6000)
 
-
-    fa = float(0)
-    fb = float(0)
-    fc = float(0)
-    xold = float(0)
-
-    fa = funcion(inicial,dato)
-    fb = funcion(final,dato)
-    iterador = int(0)
-
-    if(fa*fb>0):
-        biseccion = print('el intervalo no es valido')
-        return jsonify({ "biseccion" : biseccion})
+    if(costo<5):
+        costoEnvio = costo
+    elif(costo>=5):
+        costoEnvio = costo + 88.34 
+    elif(costo<=20.00):
+        costoEnvio = costo + 100.18
+    elif(costo>=35.00):
+        costoEnvio = costo + 118.50
+    elif(costo<=45.00):
+        costoEnvio = costo + 125.00
+    elif(costo>= 54.00):
+        costoEnvio = costo + 131.50
+    elif(costo<= 66):
+        costoEnvio = costo + 138.00
+    elif(costo>=70):
+        costoEnvio = costo + 151.00
     
-    while(error>tol):
-        r = (inicial+final)/2
-        fc=funcion(r,dato)
-        if(fa*fc>0):
-                inicial = r
-                fa = fc
-        else:
-            final = r
-            fb = fc
+    costoEnvio = round(costoEnvio,2)
 
-        iterador +=1
-        error = abs( ((r-xold)/r)*100)
-        xold = r
-        biseccion = r
-    return jsonify({ "biseccion" : biseccion})
+    return jsonify({ "costoEnvio" : costoEnvio})
 
-def funcion(a,dato):
-    x = sympy.symbols('x')
-    return sympy.sympify(dato).subs(x,a)
+@app.route('/numAlt/<string:algo>')
+def numAleat(algo):
+    valor = float(algo)
+    idPaquete = float(0)
 
-#Método de la regla falsa
-@app.route('/reglaFalsa/<string:dato1>/<string:dato2>/<string:dato3>/<string:dato4>')
-def reglaFalse(dato1,dato2,dato3,dato4):
-    inicial = float(dato1)
-    final = float(dato2)
-    tol = float(dato3)
-    dato4 = dato4
-    c = float(0)
-    if(funciones(inicial,dato4)*funcion(final,dato4)>0):
-        reglaFalsa = print("No se cumple la regla")
-        return jsonify({"reglaFalsa" : reglaFalsa})
-    else:    
-        while(1>0):
-            c = ((funciones(final,dato4)*inicial) - (funciones(inicial,dato4)*final)) / (funciones(final,dato4)-funciones(inicial,dato4))
-            if(funciones(c,dato4)<=tol):
-                reglaFalsa = c
-                break  
-            elif(funciones(inicial,dato4) * funciones(c,dato4)<0):
-                final = c
-            else:
-                inicial = c
-    return jsonify({"reglaFalsa":str(reglaFalsa)})
+    idPaquete = randint(1000000, 10000000000)
 
-def funciones(a,datos):
-    x = sympy.symbols('x')
-    return sympy.sympify(datos).subs(x,a)
+    if(idPaquete!=idPaquete):
+            numAlt = idPaquete
+            return jsonify({ "numAlt" : numAlt})
+    else:
+        idPaquete = randint(10000, 1000000)
+        numAlt = idPaquete
+        return jsonify({ "numAlt" : numAlt})
 
-
-@app.route('/raphson/<string:dato1>/<string:dato2>')
-def newthon(dato1,dato2):
-    dato1 = float(dato1)
-    dato2 = float(dato2)
-    iteraciones = int(0)
-    error= bool(True)
-    x1 = float(0.0)
-    while(error and iteraciones<1000):
-        x1 = dato1 - (funcion1(dato1)/derivada(dato1))
-        iteraciones+=iteraciones
-        if(funcion1(x1)<=dato2):
-            error = False
-            raphson = funcion1(x1)
-            return jsonify({ "raphson" : raphson})
-
-def funcion1(x):
-    return math.atan(math.cos(x))
-
-def derivada(x):
-    return -(math.sin(x)/1+x**2)
+    return 0
 
 
 if __name__ == '__main__':
