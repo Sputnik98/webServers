@@ -36,6 +36,7 @@ def calcularEnvio(peso,alto,largo,ancho):
 
     return jsonify({ "costoEnvio" : costoEnvio})
 
+#generarID
 @app.route('/numAlt/<string:algo>')
 def numAleat(algo):
     valor = float(algo)
@@ -50,8 +51,6 @@ def numAleat(algo):
         idPaquete = randint(10000, 1000000)
         numAlt = idPaquete
         return jsonify({ "numAlt" : numAlt})
-
-    return 0
 
 
 if __name__ == '__main__':
